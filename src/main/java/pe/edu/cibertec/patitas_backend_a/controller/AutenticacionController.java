@@ -47,15 +47,17 @@ public class AutenticacionController {
     @PostMapping("/logout")
     public ResponseEntity<LogoutResponseDTO> logout(@RequestBody LogoutRequestDTO logoutRequestDTO) {
         try {
+            Thread.sleep(Duration.ofSeconds(1));
 
-            logoutService.logout(logoutRequestDTO);
+            LogoutRequestDTO result = logoutService.logout(logoutRequestDTO);
 
-            return ResponseEntity.ok(new LogoutResponseDTO("00", "Cierre de Sesión exitoso",logoutRequestDTO.tipoDocumento(), logoutRequestDTO.numeroDocumento()));
+            return ResponseEntity.ok(new LogoutResponseDTO("00", "Cierre de Sesión exitoso", result.tipoDocumento(), result.numeroDocumento()));
         } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(new LogoutResponseDTO("01", "Error: " + e.getMessage(), "", ""));
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new LogoutResponseDTO("99", "Error: Ocurrió un problema en el cierre de sesión", "", ""));
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(new LogoutResponseDTO("99", "Error: " + e.getMessage(), "", ""));
         }
     }
 }
