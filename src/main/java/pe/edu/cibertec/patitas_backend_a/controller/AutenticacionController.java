@@ -11,6 +11,7 @@ import pe.edu.cibertec.patitas_backend_a.dto.LoginResponseDTO;
 import pe.edu.cibertec.patitas_backend_a.dto.LogoutRequestDTO;
 import pe.edu.cibertec.patitas_backend_a.dto.LogoutResponseDTO;
 import pe.edu.cibertec.patitas_backend_a.service.AutenticacionService;
+import pe.edu.cibertec.patitas_backend_a.service.LogoutService;
 import pe.edu.cibertec.patitas_backend_a.service.impl.LogoutServiceImpl;
 
 import java.time.Duration;
@@ -24,13 +25,13 @@ public class AutenticacionController {
     AutenticacionService autenticacionService;
 
     @Autowired
-    private LogoutServiceImpl logoutService;
+    LogoutService logoutService;
 
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
         try {
-            Thread.sleep(Duration.ofSeconds(1));
+            Thread.sleep(Duration.ofSeconds(3));
             String[] datosUsuario = autenticacionService.validarUsuario(loginRequestDTO);
             System.out.println("Resultado: " + Arrays.toString(datosUsuario));
             if (datosUsuario == null) {
@@ -47,17 +48,15 @@ public class AutenticacionController {
     @PostMapping("/logout")
     public ResponseEntity<LogoutResponseDTO> logout(@RequestBody LogoutRequestDTO logoutRequestDTO) {
         try {
-            Thread.sleep(Duration.ofSeconds(1));
-
-            LogoutRequestDTO result = logoutService.logout(logoutRequestDTO);
-
-            return ResponseEntity.ok(new LogoutResponseDTO("00", "Cierre de Sesión exitoso", result.tipoDocumento(), result.numeroDocumento()));
+            Thread.sleep(Duration.ofSeconds(3));
+            logoutService.logout(logoutRequestDTO);
+            return ResponseEntity.ok(new LogoutResponseDTO("00", "Cierre de Sesión exitoso "));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().body(new LogoutResponseDTO("01", "Error: " + e.getMessage(), "", ""));
+            return ResponseEntity.badRequest().body(new LogoutResponseDTO("01", "Error: " + e.getMessage()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().body(new LogoutResponseDTO("99", "Error: " + e.getMessage(), "", ""));
+            return ResponseEntity.badRequest().body(new LogoutResponseDTO("99", "Error: " + e.getMessage()));
         }
     }
 }

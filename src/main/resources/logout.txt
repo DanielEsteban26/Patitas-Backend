@@ -1,0 +1,4 @@
+#registros de logout
+
+3;daniel;2024-10-13 14:41:04
+3;daniel;2024-10-13 14:43:33
